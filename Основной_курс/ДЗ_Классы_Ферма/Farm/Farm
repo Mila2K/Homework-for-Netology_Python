@@ -1,0 +1,144 @@
+from abc import ABCMeta, abstractmethod
+
+
+class Animal(object, metaclass=ABCMeta):
+    total_w = 0
+
+    def __init__(self, name, weight):
+        self.name = name
+        self.weight = weight
+        Animal.total_w += weight
+
+    @abstractmethod
+    def feed(self):
+        pass
+
+    @abstractmethod
+    def collect(self):
+        pass
+
+    @abstractmethod
+    def voice(self):
+        pass
+
+
+class Sheep(Animal):
+    def feed(self):
+        return 'Накормили овцу '+self.name
+
+    def collect(self):
+        return self.name+' теперь без шерсти'
+
+    def voice(self):
+        return self.name+' говорит "Бе-Бе"'
+
+
+class Cow(Animal):
+    def feed(self):
+        return 'Накормили корову ' + self.name
+
+    def collect(self):
+        return 'Корову '+self.name+' подоили'
+
+    def voice(self):
+        return self.name + ' говорит "Му-Му"'
+
+
+class Goat(Animal):
+    def feed(self):
+        return 'Накормили козу ' + self.name
+
+    def collect(self):
+        return 'Козу '+self.name+' подоили'
+
+    def voice(self):
+        return self.name + ' говорит "Ме-Ме"'
+
+
+class Goose(Animal):
+    def feed(self):
+        return 'Накормили гуся ' + self.name
+
+    def collect(self):
+        return 'Собрали яйца у гуся '+self.name
+
+    def voice(self):
+        return self.name + ' говорит "Га-Га"'
+
+
+class Hen(Animal):
+    def feed(self):
+        return 'Накормили курицу ' + self.name
+
+    def collect(self):
+        return 'Собрали яйца у курицы '+self.name
+
+    def voice(self):
+        return self.name + ' говорит "Ко-Ко"'
+
+
+class Duck(Animal):
+    def feed(self):
+        return 'Накормили утку ' + self.name
+
+    def collect(self):
+        return 'Собрали яйца у утки '+self.name
+
+    def voice(self):
+        return self.name + ' говорит "Кря-Кря"'
+
+
+list_animals = []
+
+goose_1 = Goose('Серый', 3)
+list_animals.append(goose_1)
+
+goose_2 = Goose('Белый', 4)
+list_animals.append(goose_2)
+
+cow = Cow('Манька', 500)
+list_animals.append(cow)
+
+sheep_1 = Sheep('Барашек', 80)
+list_animals.append(sheep_1)
+
+sheep_2 = Sheep('Кудрявый', 95)
+list_animals.append(sheep_2)
+
+hen_1 = Hen('Ко-Ко', 1)
+list_animals.append(hen_1)
+
+hen_2 = Hen ('Кукареку', 1)
+list_animals.append(hen_2)
+
+goat_1 = Goat('Рога', 50)
+list_animals.append(goat_1)
+
+goat_2 = Goat('Копыта', 70)
+list_animals.append(goat_2)
+
+duck = Duck('Кряква', 1)
+list_animals.append(duck)
+
+
+def farm_list(any_list):
+    for animal in any_list:
+        print('Имя: ', animal.name,',', 'вес: ', animal.weight, 'кг')
+
+
+def feed_animals(any_list):
+    for animal in any_list:
+        print(animal.feed())
+
+
+def collect_produce(any_list):
+    for animal in any_list:
+        print(animal.collect())
+
+
+print('Общий вес животных:', Animal.total_w)
+print(max(a.weight for a in list_animals))
+
+farm_list(list_animals)
+feed_animals(list_animals)
+collect_produce(list_animals)
