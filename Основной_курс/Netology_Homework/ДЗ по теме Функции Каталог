@@ -1,0 +1,202 @@
+documents = [{
+    "type": "passport",
+    "number": "2207 876234",
+    "name": "Василий Гупкин"
+}, {
+    "type": "invoice",
+    "number": "11-2",
+    "name": "Геннадий Покемонов"
+}, {
+    "type": "insurance",
+    "number": "10006",
+    "name": "Аристарх Павлов"
+}]
+
+directories = {'1': ['2207 876234', '11-2'], '2': ['10006'], '3': []}
+
+# Необходимо реализовать пользовательские команды, которые будут выполнять следующие функции:
+
+# p – people – команда, которая спросит номер документа и выведет имя человека, которому он принадлежит;
+# l– list – команда, которая выведет список всех документов в формате passport "2207 876234" "Василий Гупкин";
+# s – shelf – команда, которая спросит номер документа и выведет номер полки, на которой он находится;
+# a – add – команда, которая добавит новый документ в каталог и в перечень полок, спросив его номер, тип, имя владельца\
+# и номер полки, на котором он будет храниться.
+
+
+def find_name(records):
+    found = False
+    print('→ Введите номер документа: ')
+    number = input()
+    for record in records:
+        if number == record['number']:
+            found = True
+            print(record['name'])
+    if found:
+        print(
+            '→ Проверьте правильность введённого номера.\nОбратите внимание на пробелы и знаки препинания.'
+        )
+
+
+def list_docs(records):
+    for record in records:
+        r_number = str(record['number'])
+        r_name = str(record['name'])
+        r_type = str(record['type'])
+        print(f'{r_type} "{r_number}" "{r_name}"')
+
+
+def find_shelf(shelves):
+    found = False
+    print('→ Введите номер документа: ')
+    number = input()
+    for shelf in shelves:
+        if number in shelves[shelf]:
+            found = True
+            print(shelf)
+    if found:
+        print(
+            '→ Проверьте правильность введённого номера.\nОбратите внимание на пробелы и знаки препинания.'
+        )
+
+
+def add_new_records(records, shelves):
+    print('→ Введите номер документа: ')
+    number = input()
+    print('→ Введите тип документа (на английском): ')
+    doc_type = input()
+    print('→ Введите имя и фамилию владельца: ')
+    name = input()
+    print(
+        '→ Введите номер полки (если указанный номер полки не существует, то он будет добавлен: '
+    )
+    records.append({'type': doc_type, 'number': number, "name": name})
+    shelf_number = input()
+    if shelf_number not in shelves:
+        shelves[shelf_number] = list()
+    shelves[shelf_number].append(number)
+    print('→ Список документов: ', records)
+    print('')
+    print('→ Список полок: ', shelves)
+
+
+def delete_document(records, shelves):
+    found = False
+    print(
+        '→ Введите номер документа, который вы хотите удалить. Внимание, документ, будет удалён безвозвратно!'
+    )
+    number = input()
+    for record in range(len(records)):
+        if records[record]['number'] == number:
+            found = True
+            del records[record]
+            break
+    if found:
+        for shelf_value in shelves.values():
+            if number in shelf_value:
+                shelf_value.remove(number)
+                print('\n → Документ успешно удалён')
+                print('\n → Список оставшихся документов: ')
+                list_docs(records)
+                print('\n → Список документов на полках (по номерам): ', '\n',
+                      shelves)
+                break
+    else:
+        print(
+            '→ Проверьте правильность введённого номера.\nОбратите внимание на пробелы и знаки препинания.'
+        )
+
+
+def move_doc(shelves):
+    found = False
+    print('\n Введите номер документа, который хотите переместить:')
+    number = input()
+    print('\n Введите номер полки, на которую хотите переместить документ:')
+    shelf_number = input()
+    for shelf_value in shelves.values():
+        if number in shelf_value:
+            found = True
+            shelf_value.remove(number)
+            shelves[shelf_number].append(number)
+            print('\n Документ успешно перемещён')
+            print('\n → Список документов на полках (по номерам): ', '\n', shelves)
+        else:
+            print('→ Такой полки не существует.\n Список существующих полок: ', shelves )
+        break
+    if found:
+        print(
+            '→ Проверьте правильность введённого номера документа или полки.\n Обратите внимание на пробелы\
+             и знаки препинания.'
+        )
+
+
+def add_shelf(shelves):
+    found = True
+    print('\n Введите номер полки, которую хотите добавить:')
+    shelf_number = input()
+    if shelf_number not in shelves:
+        found = False
+        shelves[shelf_number] = list()
+        print('\n Список полок:', shelves.keys())
+    if found:
+        print('\n Такой номер полки уже существует')
+
+
+def list_owners(records):
+    for record in records:
+        r_number = str(record['number'])
+        r_name = str(record['name'])
+        try:
+            print(r_number, r_name)
+        except KeyError:
+            print('У номера документа ', r_number, ' не указано имя владельца')
+
+
+command_list = ['p', 'l', 's', 'a', 'd', 'm', 'as', 'o']
+
+
+def main():
+    program_active = True
+    while program_active:
+        print(
+            '\n→ Введите команду (если вы не знаете, какую команду ввести, введите help): '
+        )
+        user_input = input()
+        if user_input == 'p':
+            find_name(documents)
+        if user_input == 'l':
+            list_docs(documents)
+        if user_input == 's':
+            find_shelf(directories)
+        if user_input == 'a':
+            add_new_records(documents, directories)
+        if user_input == 'd':
+            delete_document(documents, directories)
+        if user_input == 'm':
+            move_doc(directories)
+        if user_input == 'as':
+            add_shelf(directories)
+        if user_input == 'o':
+            list_owners(documents)
+        if user_input == 'help':
+            print(
+                '→ Справка: \n',
+                'а) если вы хотите узнать, кому принадлежит документ, используйте команду p \n',
+                'б) если вы хотите вывести весь список документов, используйте команду l \n',
+                'в) если вы хотите узнать номер полки, на которой находится документ, используйте команду s \n',
+                'г) если вы хотите добавить новый документ в каталог и в перечень полок, используйте команду a \n',
+                'д) если вы хотите удалить документ из каталога и из переченя полок, используйте команду d \n',
+                'е) если вы хотите переместить документ с одной полки на другую, используйте команду m \n',
+                'ж) если вы хотите добавить новую полку в перечень, используйте команду as \n',
+                'з) если вы хотите вывести список владельцев документов, используйте команду o \n',
+                'и) если вы хотите выйти из программы, используйте команду exit \n'
+            )
+        if user_input not in command_list:
+            print('→ Проверьте правильность ввода команды')
+        if user_input == "exit":
+            program_active = False
+
+    if not program_active:
+        print('→ Спасибо за использование нашей программы!')
+
+
+main()
