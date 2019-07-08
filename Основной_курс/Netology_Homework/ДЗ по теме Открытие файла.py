@@ -1,6 +1,3 @@
-cook_book = dict()
-
-
 def get_recipe_ingredient(str_add):
     if not (type(str_add) is str):
          raise Exception(f'Argument Exception {str_add} is not a string')
@@ -12,7 +9,8 @@ def get_recipe_ingredient(str_add):
     return str_dict
 
 
-def fill_cook_book(cook_book):
+def fill_cook_book():
+    cook_book = dict()
     not_empty = True
     with open('Recipes.txt', 'r',  encoding='utf-8') as f:
         while not_empty:
@@ -24,10 +22,10 @@ def fill_cook_book(cook_book):
             blank = f.readline()
             if blank == '':
                 not_empty = False
+    return cook_book
 
 
-def get_shop_list_by_dishes(dishes, person_count):
-    print(cook_book.keys())
+def get_shop_list_by_dishes(dishes, person_count, cook_book):
     shopping_list = dict()
     if not (type(dishes) is list):
         raise Exception(f'Argument Exception {dishes} is not a list')
@@ -45,18 +43,13 @@ def get_shop_list_by_dishes(dishes, person_count):
                 shopping_list[ingr_name] = dict()
                 shopping_list[ingr_name].update({'measure': ingr_item['measure']})
                 shopping_list[ingr_name].update({'quantity': ingr_item['quantity'] * person_count})
-    print(shopping_list)
+    print('\n Ваш список покупок: ', shopping_list)
 
 
 def main():
-    fill_cook_book(cook_book)
-    print(cook_book)
-    get_shop_list_by_dishes(['Омлет', 'Фахитос'], 4)
+    cook_book = fill_cook_book()
+    print('\n Книга рецептов: ', cook_book)
+    get_shop_list_by_dishes(['Омлет', 'Фахитос'], 4, cook_book)
 
 
 main()
-
-
-
-
-
