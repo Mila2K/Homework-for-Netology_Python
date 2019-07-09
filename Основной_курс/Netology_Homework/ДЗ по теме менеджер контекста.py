@@ -70,14 +70,4 @@ def main():
     with MyFile('Recipes.txt') as f:
         f.get_shop_list_by_dishes(['Омлет', 'Фахитос'], 4)
 
-
-    #
-    # print('\n Книга рецептов: ', cook_book)
-    #
-    # get_shop_list_by_dishes(['Омлет', 'Фахитос'], 4, cook_book)
-    #
-    # end_time = time.time()
-    #
-
-
 main()
