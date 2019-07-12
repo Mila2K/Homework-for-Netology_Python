@@ -6,7 +6,7 @@ API_KEY = 'trnsl.1.1.20190710T193723Z.888dd0a4855f0803.39a554a6cff475e91a0e9615e
 URL = 'https://translate.yandex.net/api/v1.5/tr.json/translate'
 
 
-def translate_it(file_path, result_file_path, from_lang, to_lang):
+def translate_it(file_path, result_file_path, from_lang, to_lang='ru'):
     file_name = Path(file_path)
     with open(file_name, 'r', encoding='UTF-8') as text:
         params = {'key': API_KEY, 'text': text, 'lang': '{}-{}'.format(from_lang, to_lang)}
@@ -18,6 +18,6 @@ def translate_it(file_path, result_file_path, from_lang, to_lang):
             translation.write(''.join(json_['text']))
 
 
-translate_it('C:\\_fforhw\\DE.txt', 'C:\\_fforhw\\res', 'de', 'ru')
-translate_it('C:\\_fforhw\\FR.txt', 'C:\\_fforhw\\res', 'fr', 'ru')
-translate_it('C:\\_fforhw\\ES.txt', 'C:\\_fforhw\\res', 'es', 'ru')
+translate_it('C:\\_fforhw\\DE.txt', 'C:\\_fforhw\\res', 'de')
+translate_it('C:\\_fforhw\\FR.txt', 'C:\\_fforhw\\res', 'fr')
+translate_it('C:\\_fforhw\\ES.txt', 'C:\\_fforhw\\res', 'es')
