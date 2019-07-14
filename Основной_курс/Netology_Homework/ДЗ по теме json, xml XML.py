@@ -6,7 +6,7 @@ def decompos_xml():
     root = xml_data.getroot()
     desc = ''
     for item in root.findall('channel/item'):
-        desc += item.find('description').text
+        desc += item.find('description').text.lower()
     return desc
 
 

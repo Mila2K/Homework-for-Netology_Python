@@ -10,7 +10,7 @@ def decompos_json():
         data_json = json.loads(data_to_decode)
         desc = ''
         for item in data_json['rss']['channel']['items']:
-            desc += ' ' + item['description']
+            desc += ' ' + item['description'].lower()
         return desc
 
 
