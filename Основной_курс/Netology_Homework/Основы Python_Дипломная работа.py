@@ -110,6 +110,11 @@ class VkSubscription:
             ensure_ascii=False,
             separators=(',', ': '))
         print(json_string)
+        with open('groups.json', 'w+', encoding='utf-8') as f:
+            json.dump(json_string, f, sort_keys=False,
+            indent=4,
+            ensure_ascii=False,
+            separators=(',', ': '))
 
     def __eq__(self, user_2):
         return self.gid == user_2.gid
