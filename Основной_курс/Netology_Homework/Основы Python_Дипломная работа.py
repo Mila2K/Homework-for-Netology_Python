@@ -2,11 +2,10 @@ import requests
 import time
 import json
 
-user_id_input = input('Введите ID пользователя: ')
 
 class VkApi:
 
-    TOKEN = '969ac6f94358deeb40764bedfb343e81ddeb55b3c2e84f4450b84efc83c62d1ed27468969943be4e49eec'
+    TOKEN = '55679f53b8a8d89799adf671d6f392b64cda24651c0ead657b8c60f6b6db8aa05558adbf42dd7717b460'
     Version = '5.52'
 
     def get_general_params(self):
@@ -110,6 +109,8 @@ class VkUser:
         return friends_groups
 
     def compare_groups(self, api_obj):
+        if len(self.subscriptions) == 0:
+            self.get_subscriptions_from_api(api_obj)
         user_groups = self.subscriptions
         friends_groups = self.get_friends_subscriptions(api_obj)
         result = list(set(user_groups) - set(friends_groups))
@@ -141,13 +142,23 @@ class VkGroup:
 
 
 def main():
+    program_active = True
+    while program_active:
+        print(
+            '\n→ Введите ID / имя пользователя. Если хотите выйти из программы, введите exit: '
+        )
+        user_input = input()
+        if user_input == "exit":
+            program_active = False
+        else:
+            my_api = VkApi()
+            try:
+                my_user = VkUser.from_dict(my_api.get_user(user_input))
+                my_user.compare_groups(my_api)
+            except:
+                print('Не удалось идентифицировать пользователя')
+    if not program_active:
+        print('→ Спасибо за использование нашей программы!')
 
-    my_api = VkApi()
-    my_user = VkUser.from_dict(my_api.get_user(user_id_input))
-    my_user.get_friends_from_api(my_api)
-    my_user.get_subscriptions_from_api(my_api)
-    my_user.get_friends_subscriptions(my_api)
-    my_user.compare_groups(my_api)
 
 main()
-
