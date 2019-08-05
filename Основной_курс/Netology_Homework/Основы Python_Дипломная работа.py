@@ -5,7 +5,7 @@ import json
 
 class VkApi:
 
-    TOKEN = '55679f53b8a8d89799adf671d6f392b64cda24651c0ead657b8c60f6b6db8aa05558adbf42dd7717b460'
+    TOKEN = '7a0661dca1f121bc42890e9704f37a05b56bf11d333ebe96f6b8a4bf76e646add99fa5282fb1d9fe38891'
     Version = '5.52'
 
     def get_general_params(self):
@@ -22,14 +22,21 @@ class VkApi:
             'fields': req_fields
         }
 
-    def get_friends(self, user_id):
-        params = self.get_general_params()
-        params['user_id'] = user_id
+    def get_response(self, params, method_url):
         response = requests.get(
-            'https://api.vk.com/method/friends.get',
+            method_url,
             params=params
         )
         result = response.json()
+        if 'error' in result:
+            raise Exception(result)
+        else:
+            return result
+
+    def get_friends(self, user_id):
+        params = self.get_general_params()
+        params['user_id'] = user_id
+        result = self.get_response(params, 'https://api.vk.com/method/friends.get')
         friends_id_list = result['response']['items']
         new_list_friends = []
         for id in friends_id_list:
@@ -40,11 +47,7 @@ class VkApi:
     def get_subscriptions(self, user_id):
         params = self.get_group_params(1, 'members_count')
         params['user_id'] = user_id
-        response = requests.get(
-            'https://api.vk.com/method/users.getSubscriptions',
-            params=params
-        )
-        result = response.json()
+        result = self.get_response(params, 'https://api.vk.com/method/users.getSubscriptions')
         new_list_groups = []
         try:
             if result['response']['items'] is not []:
@@ -59,11 +62,7 @@ class VkApi:
     def get_users(self, user_ids):
         params = self.get_general_params()
         params['user_ids'] = user_ids
-        response = requests.get(
-            'https://api.vk.com/method/users.get',
-            params=params
-        )
-        result = response.json()
+        result = self.get_response(params, 'https://api.vk.com/method/users.get')
         return result['response']
 
     def get_user(self, user_credential):
@@ -155,8 +154,8 @@ def main():
             try:
                 my_user = VkUser.from_dict(my_api.get_user(user_input))
                 my_user.compare_groups(my_api)
-            except:
-                print('Не удалось идентифицировать пользователя')
+            except Exception as e:
+                print('При выполнении возникла ошибка: ', e)
     if not program_active:
         print('→ Спасибо за использование нашей программы!')
 
