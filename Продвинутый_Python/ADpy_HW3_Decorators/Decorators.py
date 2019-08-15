@@ -2,12 +2,11 @@ import datetime
 import os
 
 
-def decor(old_function):
+def decor(old_function, file_path=os.path.join('C:\\_fforhw\\res', 'decorators.txt')):
     def new_function(*args):
         data = old_function(*args)
         arguments = args
-        new_file = os.path.join('C:\\_fforhw\\res', 'decorators.txt')
-        with open(new_file, 'w', encoding='utf-8') as file:
+        with open(file_path, 'w', encoding='utf-8') as file:
             file.write('\n Дата и время вызова функции: ')
             file.write(str(datetime.datetime.now()))
             file.write('\n Аргументы функции: ')
