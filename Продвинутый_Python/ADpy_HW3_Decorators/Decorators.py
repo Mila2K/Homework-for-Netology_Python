@@ -2,18 +2,20 @@ import datetime
 import os
 
 
-def decor(old_function, file_path=os.path.join('C:\\_fforhw\\res', 'decorators.txt')):
-    def new_function(*args):
-        data = old_function(*args)
-        arguments = args
-        with open(file_path, 'w', encoding='utf-8') as file:
-            file.write('\n Дата и время вызова функции: ')
-            file.write(str(datetime.datetime.now()))
-            file.write('\n Аргументы функции: ')
-            file.write(str(arguments))
-            file.write('\n Результат функции: ')
-            file.write(str(data))
-    return new_function
+def param_decor(param):
+    def decor(old_function):
+        def new_function(*args, **kwargs):
+            data = old_function(*args, ** kwargs)
+            arguments = args
+            with open(param, 'w', encoding='utf-8') as file:
+                file.write('\n Дата и время вызова функции: ')
+                file.write(str(datetime.datetime.now()))
+                file.write('\n Аргументы функции: ')
+                file.write(str(arguments))
+                file.write('\n Результат функции: ')
+                file.write(str(data))
+        return new_function
+    return decor
 
 
 def get_recipe_ingredient(str_add):
@@ -43,7 +45,7 @@ def fill_cook_book():
     return cook_book
 
 
-@decor
+@param_decor(param=os.path.join('C:\\_fforhw\\res', 'decorators.txt'))
 def get_shop_list_by_dishes(dishes, person_count, cook_book):
     shopping_list = dict()
     if not (type(dishes) is list):
