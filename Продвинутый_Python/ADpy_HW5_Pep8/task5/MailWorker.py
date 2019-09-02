@@ -6,7 +6,8 @@ from email.mime.multipart import MIMEMultipart
 
 
 class MailWorker:
-    def __init__(self, login, password, smtp_server, smtp_port_number, imap_port_number, imap_server):
+    def __init__(self, login, password, smtp_server, smtp_port_number,
+                 imap_port_number, imap_server):
         self.imap_port_number = imap_port_number
         self.imap_server = imap_server
         self.smtp_port_number = smtp_port_number
